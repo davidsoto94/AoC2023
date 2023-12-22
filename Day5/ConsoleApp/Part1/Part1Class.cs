@@ -1,26 +1,37 @@
+using System.Numerics;
 using Microsoft.VisualBasic;
 
 namespace Part1;
 public class Part1Class
-{
-    Dictionary<long, long> SeedToSoil = new Dictionary<long, long>();
-    Dictionary<long, long> SoilToFertilizer = new Dictionary<long, long>();
-    Dictionary<long, long> FertilizerToWater = new Dictionary<long, long>();
-    Dictionary<long, long> WaterToLight = new Dictionary<long, long>();
-    Dictionary<long, long> LightToTemperature = new Dictionary<long, long>();
-    Dictionary<long, long> TemperatureToHumidity = new Dictionary<long, long>();
-    Dictionary<long, long> HumidityToLocation = new Dictionary<long, long>();
+{   
+    List<List<long>> SeedToSoil = new List<List<long>>();
+    List<List<long>> SoilToFertilizer = new List<List<long>>();
+    List<List<long>> FertilizerToWater = new List<List<long>>();
+    List<List<long>> WaterToLight = new List<List<long>>();
+    List<List<long>> LightToTemperature = new List<List<long>>();
+    List<List<long>> TemperatureToHumidity = new List<List<long>>();
+    List<List<long>> HumidityToLocation = new List<List<long>>();
+    
     public long Part1Function(string RootPath){
         IEnumerable<string> lines = File.ReadLines(RootPath+"/Files/Test.txt");
 
         var Seeds = new List<long>();
         
-        Dictionary<long, long> selectedDictionary = null;
+        string[] part = lines.ToArray()[0].Split(" ");
+        if( part[0].Contains("seeds")){
+            for (long i = 1; i < part.Length;i++){
+                //Console.WriteLine(part[i].Trim());
+                Seeds.Add(long.Parse(part[i].Trim()));
+            }
+        }
+
+        List<List<long>> selectedDictionary = null;
+
         foreach(string line in lines){
             if(line.Length==0){
                 continue;
             }
-            string[] part = line.Split(" ");
+            part = line.Split(" ");
             if( part[0].Contains("seeds")){
                 for (long i = 1; i < part.Length;i++){
                     //Console.WriteLine(part[i].Trim());
@@ -60,12 +71,13 @@ public class Part1Class
 
             //Console.WriteLine(selectedDictionary);
         }
-        Console.WriteLine("test");
-        long soil=1000000000;
+        Console.WriteLine(string.Join(" ", SeedToSoil.SelectMany(innerList => innerList)));
+        long soil=1000000000000000000;
         foreach( long seed in Seeds){
-            long temp = GetSoil(seed);
-            if (temp<soil){
-                soil = temp;
+            long result = soil;
+            foreach (List<long> line in SeedToSoil)
+            {
+                if ()
             }
         }
         
@@ -73,35 +85,10 @@ public class Part1Class
     }
 
 
-    public long GetSoil(long seed){
-        long result = seed;
-        if(SeedToSoil.ContainsKey(seed)){
-            result = SeedToSoil[seed];
-        }
-        if(SoilToFertilizer.ContainsKey(result)){
-            result = SoilToFertilizer[result];
-        }
-        if(FertilizerToWater.ContainsKey(result)){
-            result = FertilizerToWater[result];
-        }
-        if(WaterToLight.ContainsKey(result)){
-            result = WaterToLight[result];
-        }
-        if(LightToTemperature.ContainsKey(result)){
-            result = LightToTemperature[result];
-        }
-        if(TemperatureToHumidity.ContainsKey(result)){
-            result = TemperatureToHumidity[result];
-        }
-        if(HumidityToLocation.ContainsKey(result)){
-            result = HumidityToLocation[result];
-        }
-        return result;
-    }
-
-    public void AddToDict(string[] line, Dictionary<long, long> Dict){
-        for(long i = 0; i<long.Parse(line[2]);i++){
-            Dict[long.Parse(line[1]) + i] = long.Parse(line[0]) + i;
-        }
+    public void AddToDict(string[] line, List<List<long>> list){
+        list.Add(new List<long>(){
+            long.Parse(line[0]),long.Parse(line[1]),long.Parse(line[2])
+        });
+        
     }
 }
