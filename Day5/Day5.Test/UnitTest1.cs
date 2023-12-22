@@ -10,7 +10,7 @@ public class UnitTest1
         var part1 = new Part1Class();
 
 
-        var result = part1.Part1Function();
+        var result = part1.Part1Function("../../../..");
 
         Assert.Equal(35, result);
 
